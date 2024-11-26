@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lending Bridge Loan Calculator</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #9ec5ec; padding: 20px;">
+
+    <div class="container" style="background-color: #ffffff; border-radius: 8px; max-width: 900px; margin: auto; padding: 20px;">
+        <h1 style="font-weight: bold; margin-bottom: 15px;">Calculate How Much You Can Borrow?</h1>
+        <p style="color: #6c757d;">Find out how much you or your clients can borrow today with our Loan Calculators.</p>
+        <p style="color: #6c757d; font-size: 0.9rem;">
+            <strong>Note:</strong> Enter a few relevant details about your property and get a free instant quote with indicative terms estimating how much it may cost.
+        </p>
+
+        <h3 style="margin-top: 20px;">Bridge Loan Calculator</h3>
+        <div class="row" style="margin-top: 15px;">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="propertyType" style="font-weight: bold;">Property Type</label>
+                    <select 
+                        class="form-control" 
+                        id="propertyType" 
+                        style="border-radius: 5px; border: 1px solid #ced4da; padding: 8px;" 
+                        onchange="updateInterestRate()">
+                        <option value="Residential">Residential</option>
+                        <option value="Commercial">Commercial</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="numberOfProperties" style="font-weight: bold;">Number of Properties</label>
+                    <input type="number" class="form-control" id="numberOfProperties" placeholder="2" style="border-radius: 5px; border: 1px solid #ced4da; padding: 8px;">
+                </div>
+                <div class="form-group">
+                    <label for="propertyValue" style="font-weight: bold;">Property Value</label>
+                    <input type="text" class="form-control" id="propertyValue" placeholder="£ 1,500,000" style="border-radius: 5px; border: 1px solid #ced4da; padding: 8px;">
+                </div>
+                <div class="form-group">
+                    <label for="loanAmount" style="font-weight: bold;">Loan Amount Required</label>
+                    <input type="text" class="form-control" id="loanAmount" placeholder="£ 500,000" style="border-radius: 5px; border: 1px solid #ced4da; padding: 8px;">
+                </div>
+                <div class="form-group">
+                    <label for="securityType" style="font-weight: bold;">Security Type</label>
+                    <select class="form-control" id="securityType" style="border-radius: 5px; border: 1px solid #ced4da; padding: 8px;">
+                        <option>First charge</option>
+                        <option>Second charge</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label style="font-weight: bold;">Repayment Type</label>
+                    <div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="repaymentType" id="servicedMonthly" value="Serviced Monthly" style="margin-right: 5px;">
+                            <label class="form-check-label" for="servicedMonthly" style="margin-right: 15px;">Serviced Monthly</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="repaymentType" id="retainedInterest" value="Retained Interest" style="margin-right: 5px;">
+                            <label class="form-check-label" for="retainedInterest">Retained Interest</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="loanTerm" style="font-weight: bold;">Loan Term</label>
+                    <input 
+                        type="range" 
+                        id="loanTerm" 
+                        min="1" 
+                        max="12" 
+                        value="10" 
+                        style="width: 100%;" 
+                        oninput="updateLoanTerm(this.value)"
+                    >
+                    <small id="loanTermLabel" style="display: block; color: #6c757d;">10 Months</small>
+                </div>
+               
+                <div class="form-group">
+                    <label for="loanToValue" style="font-weight: bold;">Loan-to-Value (Max 70%)</label>
+                    <input 
+                        type="range" 
+                        id="loanToValue" 
+                        min="0" 
+                        max="70" 
+                        value="30" 
+                        style="width: 100%;"
+                        oninput="updateLoanToValue(this.value)"
+                    >
+                    <small id="loanToValueLabel" style="display: block; color: #6c757d;">30%</small>
+                </div>    
+            </div>
+
+            <div class="col-md-6">
+                <h4 style="font-weight: bold;">Loan Estimate</h4>
+                <div class="form-group">
+                    <label for="grossLoan" style="font-weight: bold;">Gross Loan</label>
+                    <input type="text" class="form-control" id="grossLoan" value="£ 480,000" readonly style="border-radius: 5px; border: 1px solid #ced4da; background-color: #e9ecef; padding: 8px;">
+                </div>
+                <div class="form-group">
+                    <label for="netLoan" style="font-weight: bold;">Net Loan</label>
+                    <input type="text" class="form-control" id="netLoan" value="£ 411,500" readonly style="border-radius: 5px; border: 1px solid #ced4da; background-color: #e9ecef; padding: 8px;">
+                </div>
+                <div class="form-group">
+                    <label for="interestRate" style="font-weight: bold;">Interest Rate</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="interestRate" 
+                        value="1.25% (Residential)" 
+                        readonly 
+                        style="border-radius: 5px; border: 1px solid #ced4da; background-color: #e9ecef; padding: 8px;">
+                </div>
+                <div class="form-group">
+                    <label for="monthlyPayment" style="font-weight: bold;">Monthly Payment</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="monthlyPayment" 
+                        value="£ 0.00" 
+                        readonly 
+                        style="border-radius: 5px; border: 1px solid #ced4da; background-color: #e9ecef; padding: 8px;">
+                </div>
+            </div>
+        </div>
+        <p style="color: #6c757d; font-size: 0.9rem; margin-top: 20px;">This is an estimate only and is used to give you a basic understanding of our terms. To get a precise quote, contact us now.</p>
+        <button class="btn btn-dark" style="border-radius: 5px; background-color: #343a40; border: none; padding: 10px 20px;">Talk To A Bridging Expert</button>
+    </div>
+
+    <script>
+        const propertyValueInput = document.getElementById('propertyValue');
+        const loanToValueSlider = document.getElementById('loanToValue');
+        const loanTermSlider = document.getElementById('loanTerm');
+        const propertyTypeSelect = document.getElementById('propertyType');
+
+        propertyValueInput.addEventListener('input', calculateLoanDetails);
+        loanToValueSlider.addEventListener('input', () => {
+            loanToValueLabel.textContent = `${loanToValueSlider.value}%`;
+            calculateLoanDetails();
+        });
+        loanTermSlider.addEventListener('input', () => {
+            loanTermLabel.textContent = `${loanTermSlider.value} Month${loanTermSlider.value > 1 ? 's' : ''}`;
+            calculateLoanDetails();
+        });
+        propertyTypeSelect.addEventListener('change', calculateLoanDetails);
+            function getInterestRate() {
+            switch (propertyTypeSelect.value) {
+                case 'Residential':
+                    return 1.25;
+                case 'Commercial':
+                    return 1.85;
+                default:
+                    return 1.25;
+            }
+        }
+        function calculateLoanDetails() {
+            const propertyValue = parseFloat(propertyValueInput.value.replace(/[^0-9]/g, '')) || 0;
+            const loanToValue = parseFloat(loanToValueSlider.value) / 100;
+            const loanTerm = parseInt(loanTermSlider.value);
+            const interestRate = getInterestRate();
+    
+            if (propertyValue <= 0) {
+                resetOutputs();
+                return;
+            }
+            const grossLoan = propertyValue * loanToValue;
+            const netLoan = grossLoan * 0.85;
+            const monthlyPayment = (grossLoan * (interestRate / 100)) / loanTerm;
+    
+            grossLoanOutput.value = `£ ${grossLoan.toLocaleString()}`;
+            netLoanOutput.value = `£ ${netLoan.toLocaleString()}`;
+            interestRateOutput.value = `${interestRate.toFixed(2)}% (${propertyTypeSelect.value})`;
+            monthlyPaymentOutput.value = `£ ${monthlyPayment.toFixed(2)}`;
+        }
+        function resetOutputs() {
+            grossLoanOutput.value = '£ 0';
+            netLoanOutput.value = '£ 0';
+            interestRateOutput.value = 'N/A';
+            monthlyPaymentOutput.value = '£ 0.00';
+        }
+        const loanToValueLabel = document.getElementById('loanToValueLabel');
+        const loanTermLabel = document.getElementById('loanTermLabel');
+        const grossLoanOutput = document.getElementById('grossLoan');
+        const netLoanOutput = document.getElementById('netLoan');
+        const interestRateOutput = document.getElementById('interestRate');
+        const monthlyPaymentOutput = document.getElementById('monthlyPayment');
+
+    </script>
+</body>
+</html>
